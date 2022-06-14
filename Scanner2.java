@@ -17,79 +17,8 @@ public class Scanner2 {
         inputLocal = new Scanner(source);
     }
 
-    public static boolean isTruthy(String value) {
-        value = value.trim().toLowerCase();
 
-        for (String truthyValue : truthy) {
-            if (truthyValue.equals(value))
-                return true;
-        }
 
-        return false;
-    }
-    
-    public static boolean isFalsy(String value) {
-        value = value.trim().toLowerCase();
-
-        for (String falsyValue : falsy) {
-            if (falsyValue.equals(value))
-                return true;
-        }
-
-        return false;
-    }
-
-    public String nextStringInt() {
-        String value = nextLine();
-        value = value.replaceAll("[^\\d-]", "");
-        boolean isPositive = !value.startsWith("-");
-        value = value.replaceAll("\\D", "");
-
-        if (!isPositive)
-            value = "-" + value;
-
-        return value;
-    }
-
-    public String nextStringUnsignedInt() {
-        String value = nextLine();
-        value = value.replaceAll("\\D", "");
-        return value;
-    }
-
-    public String nextStringDecimal() {
-        String value = nextLine();
-        value = value.replace(',', '.').replaceAll("[^\\d\\.-]", "").replaceAll("^\\.-", "-.");
-
-        boolean isPositive = !value.startsWith("-");
-        value = value.replace("-", "");
-
-        value = value.replaceAll("^\\.", "0.");
-
-        if (value.endsWith("."))
-            value = value.substring(0, value.length() - 1);
-
-        if (value.contains("."))
-            value = value.substring(0, value.indexOf('.')) + '.' + value.substring(value.indexOf('.'), value.length()).replace(".", "");
-
-        if (!isPositive)
-            value = "-" + value;
-
-        return value;
-    }
-    
-    public String nextStringUnsignedDecimal() {
-        String value = nextLine();
-        value = value.replace(',', '.').replaceAll("[^\\d\\.]", "").replaceAll("^\\.", "0.");
-
-        if (value.endsWith("."))
-            value = value.substring(0, value.length() - 1);
-
-        if (value.contains("."))
-            value = value.substring(0, value.indexOf('.')) + '.' + value.substring(value.indexOf('.'), value.length()).replace(".", "");
-
-        return value;
-    }
 
     public String nextLine() {
         boolean validInput;
@@ -115,17 +44,7 @@ public class Scanner2 {
     }
 
     public String next() {
-        boolean validInput;
-        String value;
-
-        do {
-            validInput = true;
-            value = nextLine();
-            if (value.isEmpty())
-                validInput = false;
-        } while (!validInput);
-
-        return value.split(" ")[0];
+        return nextLine().split(" ")[0];
     }
 
     public String next(String regex) {
@@ -138,17 +57,7 @@ public class Scanner2 {
     }
 
     public Character nextChar() {
-        boolean validInput;
-        String value;
-
-        do {
-            validInput = true;
-            value = next();
-            if (value.isEmpty())
-                validInput = false;
-        } while (!validInput);
-
-        return value.charAt(0);
+        return nextLine().charAt(0);
     }
 
     public char nextChar(String regex) {
@@ -160,6 +69,91 @@ public class Scanner2 {
         return value;
     }
 
+
+
+
+    public static boolean isTruthy(String value) {
+        value = value.trim().toLowerCase();
+
+        for (String truthyValue : truthy) {
+            if (truthyValue.equals(value))
+                return true;
+        }
+
+        return false;
+    }
+    
+    public static boolean isFalsy(String value) {
+        value = value.trim().toLowerCase();
+
+        for (String falsyValue : falsy) {
+            if (falsyValue.equals(value))
+                return true;
+        }
+
+        return false;
+    }
+
+    public String nextStringInt() {
+        String value;
+        boolean isValid;
+
+        do {
+            isValid = true;
+            value = nextLine();
+            if (!Pattern.compile("\\d").matcher(value).find())
+                isValid = false;
+        } while (!isValid);
+
+        value = value.replaceAll("[^\\d-]", "");
+        boolean isPositive = !value.startsWith("-");
+        value = value.replaceAll("\\D", "");
+
+        if (!isPositive)
+            value = "-" + value;
+
+        return value;
+    }
+
+    public String nextStringUnsignedInt() {
+        return nextStringInt().replace("-", "");
+    }
+
+    public String nextStringDecimal() {
+        String value;
+        boolean isValid;
+
+        do {
+            isValid = true;
+            value = nextLine();
+            if (!Pattern.compile("\\d").matcher(value).find())
+                isValid = false;
+        } while (!isValid);
+        
+        value = value.replace(',', '.').replaceAll("[^\\d\\.-]", "").replaceAll("^\\.-", "-.");
+
+        boolean isPositive = !value.startsWith("-");
+        value = value.replace("-", "");
+
+        value = value.replaceAll("^\\.", "0.");
+
+        if (value.endsWith("."))
+            value = value.substring(0, value.length() - 1);
+
+        if (value.contains("."))
+            value = value.substring(0, value.indexOf('.')) + '.' + value.substring(value.indexOf('.'), value.length()).replace(".", "");
+        else
+            value = value + ".0";
+
+        if (!isPositive)
+            value = "-" + value;
+
+        return value;
+    }
+    
+    public String nextStringUnsignedDecimal() {
+        return nextStringDecimal().replace("-", "");
+    }
 
 
 
@@ -179,8 +173,8 @@ public class Scanner2 {
     public int nextInt(int minValue, int maxValue) {
         int value = nextInt(minValue);
 
-        if (value > maxValue)
-            throw new IllegalArgumentException("O número fornecido está acima do valor máximo solicitado.");
+        if (value > maxValue) 
+        throw new IllegalArgumentException("O número fornecido está acima do valor máximo solicitado.");
 
         return value;
     }
@@ -246,9 +240,9 @@ public class Scanner2 {
     public byte nextUnsignedByte() {
         return Byte.parseByte(nextStringUnsignedInt());
     }
+    
 
-
-
+    
 
     public float nextFloat() {
         return Float.parseFloat(nextStringDecimal());
